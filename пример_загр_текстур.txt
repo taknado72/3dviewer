@@ -1,0 +1,103 @@
+﻿Загрузка одной текстуры:
+
+
+var textureLoader = new THREE.TextureLoader();
+var texture = textureLoader.load( 'foo.png' );
+texture.flipY = false;
+
+var loader = new THREE.GLTFLoader();
+loader.load( 'foo.glb', ( gltf ) => {
+  var model = gltf.scene;
+  model.traverse ( ( o ) => {
+    if ( o.isMesh ) {
+      // note: for a multi-material mesh, `o.material` may be an array,
+      // in which case you'd need to set `.map` on each value.
+      o.material.map = texture;
+    }
+  } );
+  scene.add( model );
+} );
+
+============================================================================================
+
+
+
+Загрузка нескольких текстур:
+
+В этом примере текстуры загружаются внутри конструктора сетки, несколько текстур загружаются с помощью Promises .
+
+
+Создайте новый контейнер, используя Object3Dдве сетки в одном контейнере:
+
+var Globe = function (radius, segments) {
+
+  THREE.Object3D.call(this);
+
+  this.name = "Globe";
+
+  var that = this;
+
+  // instantiate a loader
+  var loader = new THREE.TextureLoader();
+Карта, в textures которой каждый объект содержит url файл текстуры и valдля  хранения значения объекта текстуры Three.js .
+
+  // earth textures
+  var textures = {
+    'map': {
+      url: 'relief.jpg',
+      val: undefined
+    },
+    'bumpMap': {
+      url: 'elev_bump_4k.jpg',
+      val: undefined
+    },
+    'specularMap': {
+      url: 'wateretopo.png',
+      val: undefined
+    }
+  };
+  
+Массив обещаний, для каждого объекта на карте, называемого texturespush new Promise в массиве texturePromises, вызовет каждое Promise loader.load. Если значение entry.valявляется допустимым THREE.Textureобъектом, разрешите обещание.
+
+  var texturePromises = [], path = './';
+
+  for (var key in textures) {
+    texturePromises.push(new Promise((resolve, reject) => {
+      var entry = textures[key]
+      var url = path + entry.url
+
+      loader.load(url,
+        texture => {
+          entry.val = texture;
+          if (entry.val instanceof THREE.Texture) resolve(entry);
+        },
+        xhr => {
+          console.log(url + ' ' + (xhr.loaded / xhr.total * 100) +
+            '% loaded');
+        },
+        xhr => {
+          reject(new Error(xhr +
+            'An error occurred loading while loading: ' +
+            entry.url));
+        }
+      );
+    }));
+  }
+  
+Promise.all принимает массив обещаний в texturePromises качестве аргумента. Это заставляет браузер ждать выполнения всех обещаний, а когда они выполняются, мы можем загрузить геометрию и материал.
+
+  // load the geometry and the textures
+  Promise.all(texturePromises).then(loadedTextures => {
+
+    var geometry = new THREE.SphereGeometry(radius, segments, segments);
+    var material = new THREE.MeshPhongMaterial({
+      map: textures.map.val,
+      bumpMap: textures.bumpMap.val,
+      bumpScale: 0.005,
+      specularMap: textures.specularMap.val,
+      specular: new THREE.Color('grey')
+    });
+
+    var earth = that.earth = new THREE.Mesh(geometry, material);
+    that.add(earth);
+  });
