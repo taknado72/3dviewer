@@ -31,7 +31,7 @@ input.btn:hover{
 
 #settings {
     width: 300px;
-    min-height: 100VH;
+    height: 100%;
     position: absolute;
     top: 0;
     left: -350px;
@@ -43,12 +43,38 @@ input.btn:hover{
     padding: 10px 20px;
     font-size: 14px;
     opacity: 0.7;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 #settings.open {
     left: 0;
 }
+
+
+/* scrollbar*/
+#selectMaterials::-webkit-scrollbar {
+    width: 6px;
+    background-color: #707070;
+}
+
+
+#selectMaterials::-webkit-scrollbar-thumb {
+    width: 6px;
+    background-color:  rgba(0,0,0,.5);
+}
+
+
+#settings::-webkit-scrollbar {
+    width: 6px;
+    background-color: #707070;
+}
+
+
+#settings::-webkit-scrollbar-thumb {
+    width: 6px;
+    background-color:  rgba(0,0,0,.5);
+}
+
 
 #texture-browser-panel {
     background: rgba(0,0,0,.5);
