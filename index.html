@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>threejs - models</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Models viewer</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="bottom_bar mx-auto">
-            <input type="button" value="Настройки" class="btn" id="settings-toggler"/>
-            <input type="button" value="Не вращать" class="btn" onclick="showInfo(0);"/>
-            <input type="button" value="Характеристики" class="btn" onclick="showInfo(1);"/>
-            <input type="button" value="Продолжить" class="btn" onclick="showInfo(2);"/>
-            <input type="button" value="Разобрать" class="btn" onclick="showInfo(3);"/>
-            <input type="button" value="Собрать" class="btn" onclick="showInfo(4);"/>
-            <input type="button" value="Детально" class="btn" onclick="showInfo(5);"/>
-            <input type="button" value="Назад" class="btn" onclick="showInfo(6);"/>
+    <div class="container-fluid bg">
+        <div class="row justify-content-md-center">
+                <div class="bottom_bar mx-auto">
+                    <input type="button" value="Настройки" class="btn" id="settings-toggler"/>
+                    <input type="button" value="Не вращать" class="btn" onclick="showInfo(0);"/>
+                    <input type="button" value="Характеристики" class="btn" onclick="showInfo(1);"/>
+                    <input type="button" value="Продолжить" class="btn" onclick="showInfo(2);"/>
+                    <input type="button" value="Разобрать" class="btn" onclick="showInfo(3);"/>
+                    <input type="button" value="Собрать" class="btn" onclick="showInfo(4);"/>
+                    <input type="button" value="Детально" class="btn" onclick="showInfo(5);"/>
+                    <input type="button" value="Назад" class="btn" onclick="showInfo(6);"/>
+                </div>
         </div>
-        
+               
         <div id="1" style="left:80%; top:10%; width:300px; position:absolute; z-index:100; display:none;">
             <h2>Модуль для майнинга</h2> <br>
             <h4>Технические характеристики:</h4>
@@ -31,87 +35,87 @@
             Стоимость: по договоренности
         </div>
    
+        <section id="settings">
+            <form>
+                <div class="form-group">
+                <label for="loadingMaterials">Загрузка модели:</label>
+                <input type="file" class="form-control-file" id="loadingMaterials">
+                </div>
+            </form>
+            <hr color="#707070">
+            <form>
+                <div class="form-group">
+                    <label for="selectMaterials">Укажите материал (Realistic PBR):</label>
+                    <select multiple class="form-control" id="selectMaterials">
+                    <option>Material 1</option>
+                    <option>Material 2</option>
+                    <option>Material 3</option>
+                    <option>Material 4</option>
+                    <option>Material 5</option>
+                    </select>
+                </div>
 
-    <section id="settings">
-        <form>
-            <div class="form-group">
-              <label for="loadingMaterials">Загрузка модели:</label>
-              <input type="file" class="form-control-file" id="loadingMaterials">
-            </div>
-        </form>
-        <hr color="#707070">
-        <form>
-            <div class="form-group">
-                <label for="selectMaterials">Укажите материал (Realistic PBR):</label>
-                <select multiple class="form-control" id="selectMaterials">
-                <option>Material 1</option>
-                <option>Material 2</option>
-                <option>Material 3</option>
-                <option>Material 4</option>
-                <option>Material 5</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label for="rangeBaseColor">Base Color:</label>
+                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeBaseColor">
+                    <input type="button" value="T" class="btn settTx"></button>
+                </div>
+                <div class="form-group">
+                    <label for="rangeMetalness">Metalness:</label>
+                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeMetalness">
+                    <input type="button" value="T" class="btn settTx"></button>
+                </div>
+                <div class="form-group">
+                    <label for="rangeRoughness">Roughness:</label>
+                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeRoughness">
+                    <input type="button" value="T" class="btn settTx"></button>
+                </div>
+                <div class="form-group">
+                    <label for="rangeNormal">Normal:</label>
+                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeNormal">
+                    <input type="button" value="T" class="btn settTx"></button>
+                </div>
+                <div class="form-group">
+                    <label for="rangeEmissive">Emissive:</label>
+                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeEmissive">
+                    <input type="button" value="T" class="btn settTx"></button>
+                </div>
+                <div class="form-group">
+                    <label for="rangeBump">Bump:</label>
+                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeBump">
+                    <input type="button" value="T" class="btn settTx"></button>
+                </div>
+            </form>
+            <hr color="#707070">
+            <button type="button" class="btn btn-outline-secondary" id="settings-save-btn">Сохранить</button>
+            <button type="button" class="btn btn-outline-secondary" id="settings-cancel-btn">Отменить</button>
+        </section>
 
-            <div class="form-group">
-                <label for="rangeBaseColor">Base Color:</label>
-                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeBaseColor">
-                <input type="button" value="T" class="btn settTx"></button>
-            </div>
-            <div class="form-group">
-                <label for="rangeMetalness">Metalness:</label>
-                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeMetalness">
-                <input type="button" value="T" class="btn settTx"></button>
-            </div>
-            <div class="form-group">
-                <label for="rangeRoughness">Roughness:</label>
-                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeRoughness">
-                <input type="button" value="T" class="btn settTx"></button>
-            </div>
-            <div class="form-group">
-                <label for="rangeNormal">Normal:</label>
-                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeNormal">
-                <input type="button" value="T" class="btn settTx"></button>
-            </div>
-            <div class="form-group">
-                <label for="rangeEmissive">Emissive:</label>
-                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeEmissive">
-                <input type="button" value="T" class="btn settTx"></button>
-            </div>
-            <div class="form-group">
-                <label for="rangeBump">Bump:</label>
-                <input type="range" class="custom-range" min="0" max="5" step="0.5" id="rangeBump">
-                <input type="button" value="T" class="btn settTx"></button>
-            </div>
-        </form>
-        <hr color="#707070">
-        <button type="button" class="btn btn-outline-secondary" id="settings-save-btn">Сохранить</button>
-        <button type="button" class="btn btn-outline-secondary" id="settings-cancel-btn">Отменить</button>
-    </section>
-
-    <section id="texture-browser-panel">
-        <p>Доступные текстуры:</p>
-        <div class="textures-available">
-            <a href="#">textura1.png</a> <br>
-            <a href="#">textura2.png</a> <br>
-            <a href="#">textura3.png</a> <br>
-            <a href="#">textura4.png</a> <br>
-            <a href="#">textura5.png</a> <br>
-        </div> 
-        <hr color="#707070">
-        <form>
-            <div class="form-group">
-                <label for="loadingTextures">Загрузить новую текстуру:</label>
-                <input type="file" class="form-control-file" id="loadingTextures">
-                <hr color="#707070">
-                <button type="button" class="btn btn-outline-secondary" id="settings-cancel-btn">Отменить</button>
-            </div>
-        </form>
-    </section>
-</div>
-
-    <canvas id="myCanvas"></canvas>
+        <section id="texture-browser-panel">
+            <p>Доступные текстуры:</p>
+            <div class="textures-available">
+                <a href="#">textura1.png</a> <br>
+                <a href="#">textura2.png</a> <br>
+                <a href="#">textura3.png</a> <br>
+                <a href="#">textura4.png</a> <br>
+                <a href="#">textura5.png</a> <br>
+            </div> 
+            <hr color="#707070">
+            <form>
+                <div class="form-group">
+                    <label for="loadingTextures">Загрузить новую текстуру:</label>
+                    <input type="file" class="form-control-file" id="loadingTextures">
+                    <hr color="#707070">
+                    <button type="button" class="btn btn-outline-secondary" id="settings-cancel-btn">Отменить</button>
+                </div>
+            </form>
+        </section>
     
+        <canvas id="myCanvas"></canvas>
     
+    </div>
+
+        
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
