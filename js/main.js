@@ -132,41 +132,35 @@
     loader.load('models/RIG_lowpoly/RIG_lowpoly.glb', handle_load);
 
     function handle_load(gltf) {
-
         console.log(gltf);
         mesh = gltf.scene;
         console.log(mesh.children[0]);
-                
-        scene.add( mesh );
+    
+        scene.add(mesh);
         mesh.position.y = 35;
         mesh.scale.set(0.5, 0.5, 0.5);
         mesh.castShadow = true;
-
-
-        //materialsName =[];
-        mesh.traverse(function (child) {
-			if (child.isMesh) {
-				child.castShadow = true;
-                child.receiveShadow = true;
-
-                //materialsName.push["child.material.name"];
-                
-                // var e = document.getElementById('selectMaterials');
-            
-                // for (var i = 0; i < materials.length; i++){
-                //     var option = document.createElement('option');
-                //     option.innerHTML = materials[i];
-                //     e.appendChild(option); 
-                // }
-
-                //console.log(materialsName);
-
-                //materials.push[child.material.name];
-                //addTexture(child.material.name);
-            }
+    
+        const materialsName = new Set();
+        mesh.traverse(function(child) {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+    
+            materialsName.add(child.material.name);
+          }
         });
-        
-    };
+    
+        const selectEl = document.getElementById('selectMaterials');
+    
+        materialsName.forEach(material => {
+          var option = document.createElement('option');
+          option.innerHTML = material;
+          selectEl.appendChild(option);
+    
+          addTexture(material);
+        });
+      };
 
 
     //RENDER LOOP
