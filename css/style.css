@@ -23,6 +23,14 @@ input.btn:hover{
     background: #707070; 
 }
 
+.progress {
+    width: 90%;
+    position: absolute;
+    z-index: 6;
+    top: 5px;
+    margin-right: 10px;
+}
+
 .bottom_bar {
     position: absolute;
     bottom: 5px;

@@ -80,7 +80,7 @@
         //map: floorTexture, side: THREE.DoubleSide 
         } );
 	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	var floor = new THREE.Mesh( floorGeometry, floorMaterial );
 	floor.position.y = -10;
     floor.rotation.x = Math.PI / 2;
     floor.receiveShadow = true;
@@ -91,21 +91,45 @@
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
     
 
+
+    //LOADING MANAGER
+    var manager = new THREE.LoadingManager();
+
+    manager.onProgress = function( url, itemsLoaded, itemsTotal ){
+        loadingElem = document.querySelector('.progress');
+        var progressBarElem = loadingElem.querySelector('.progress-bar');
+        var progress = (itemsLoaded / itemsTotal) * 100;
+        progressBarElem.style.cssText = 'width: 100%';
+        progressBarElem.innerHTML = `Loading...${progress.toFixed(0)} %`;
+    };
+
+    manager.onLoad = function(){
+        console.log("Loader all resources");
+        setTimeout(function(){
+            loadingElem.style.display = 'none';
+        }, 6000);
+    };
+
+    manager.onError = function ( url ) {
+        console.log( 'There was an error loading ' + url );
+    };
+
+
+
     //TEXTURE
-    // var manager = new THREE.LoadingManager();
     // var textureloader  = new THREE.ImageLoader( manager );
 
     // var textureCoolerChasis = new THREE.Texture();
 
-    // textureloader.load( './models/RIG_lowpoly/Cooler_chasis_baseColor.png', function ( image ) {
+    // textureloader.load( 'models/RIG_lowpoly/Cooler_chasis_baseColor.png', function ( image ) {
     //     textureCoolerChasis.image = image;
     //     textureCoolerChasis.needsUpdate = true;
     // });
 
 
     //MODEL (загрузка модели в формате gltf)
-    var loader = new THREE.GLTFLoader();
-   // loader.load('./models/RIG_lowpoly/RIG_lowpoly.glb', handle_load);
+    var loader = new THREE.GLTFLoader(manager);
+    loader.load('models/RIG_lowpoly/RIG_lowpoly.glb', handle_load);
 
     function handle_load(gltf) {
 
