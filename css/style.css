@@ -62,6 +62,11 @@ input.btn:hover{
 }
 
 
+.custom-range{
+    width: 200px;
+    margin-right: 10px;
+}
+
 /* scrollbar settings */
 #selectMaterials::-webkit-scrollbar {
     width: 6px;
