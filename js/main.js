@@ -46,8 +46,38 @@
 	scene.add(axes);
 
 
-    //LIGHTS
 
+    //SKYBOX
+    var imagePrefix = "img/dawnmountain-";
+	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+	var imageSuffix = ".png";
+	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );	
+	
+	var materialArray = [];
+	for (var i = 0; i < 6; i++)
+		materialArray.push( new THREE.MeshBasicMaterial({
+			map: new THREE.TextureLoader().load( imagePrefix + directions[i] + imageSuffix ),
+			side: THREE.BackSide
+		}));
+	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    //scene.add( skyBox );
+
+
+
+    //HDR
+    // var hdrUrls = [ 'px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr' ];
+	// hdrCubeMap = new HDRCubeTextureLoader()
+	// 				.setPath( 'img/pisaHDR/' )
+	// 				.setDataType( THREE.UnsignedByteType )
+	// 				.load( hdrUrls, function () {
+                    // 	hdrCubeRenderTarget = pmremGenerator.fromCubemap( hdrCubeMap );
+                    // 	hdrCubeMap.magFilter = THREE.LinearFilter;
+                    // 	hdrCubeMap.needsUpdate = true;
+                    // 	} );
+
+
+    //LIGHTS
     // var width = 300;
     // var height = 300;
     // var intensity = 20;
