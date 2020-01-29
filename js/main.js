@@ -47,15 +47,43 @@
 
 
     //LIGHTS
+
+    // var width = 300;
+    // var height = 300;
+    // var intensity = 20;
+    // var rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+    // rectLight.position.set( 5, 400, 0 );
+    // rectLight.lookAt( 0, 0, 0 );
+    // rectLight.visible = true;
+    // scene.add( rectLight )
+    
+    // rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
+    // rectLight.add( rectLightHelper );
+
+
+    // var width1 = 300;
+    // var height1 = 300;
+    // var intensity1 = 10;
+    // var rectLight1 = new THREE.RectAreaLight( 0xffffff, intensity1,  width1, height1 );
+    // rectLight1.position.set( 5, 0, 600 );
+    // rectLight1.lookAt( 0, 0, 0 );
+    // rectLight1.visible = true;
+    // scene.add( rectLight1 )
+    
+    // rectLightHelper1 = new THREE.RectAreaLightHelper( rectLight1 );
+    // rectLight1.add( rectLightHelper1 );
+
+
+
     var dirLight = new THREE.DirectionalLight( 0xffffff, 2 );
     dirLight.color.setHSL( 0.1, 1, 0.95 );
     dirLight.position.set( -1, 1.75, 1 );
     dirLight.position.multiplyScalar( 50 );
     scene.add( dirLight );
 
-    var spotLight = new THREE.SpotLight( 0xffffff, 30 );
-    //spotLight.position.set( 0, 0, 0 );
-    spotLight.position.set( 10, 200, -90 );
+    var spotLight = new THREE.SpotLight( 0xffffff, 70 );
+    spotLight.position.set( 0, 300, 0 );
+    //spotLight.position.set( 10, 200, -90 );
     spotLight.angle = Math.PI / 4;
     spotLight.penumbra = 0.05;
     spotLight.decay = 2;
@@ -76,8 +104,8 @@
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
 	floorTexture.repeat.set( 10, 10 );
 	var floorMaterial = new THREE.MeshStandardMaterial( { 
-        color: 0x262626
-        //map: floorTexture, side: THREE.DoubleSide 
+        //color: 0x262626
+        map: floorTexture, side: THREE.DoubleSide 
         } );
 	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
 	var floor = new THREE.Mesh( floorGeometry, floorMaterial );
@@ -148,6 +176,8 @@
             child.receiveShadow = true;
     
             materialsName.add(child.material.name);
+            getParamMaterial(child);
+            setParamMaterial(child);
           }
         });
     
@@ -158,9 +188,9 @@
           option.innerHTML = material;
           selectEl.appendChild(option);
     
-          addTexture(material);
+          //addTexture(material);
         });
-      };
+    };
 
 
     //RENDER LOOP
@@ -205,6 +235,68 @@
         camera.updateProjectionMatrix();
 
         renderer.setSize( myCanvas.clientWidth, myCanvas.clientHeight );
+    }
+
+
+
+
+    function getParamMaterial(mesh){
+        
+        switch (mesh.material.name) {
+            case 'Diod':
+            var Diod_roughness = document.getElementById('roughness');
+                Diod_roughness.innerHTML += ' ' + mesh.material.roughness;
+            var Diod_option_roughness = document.getElementById('rangeRoughness');
+                Diod_option_roughness.value = mesh.material.roughness;
+
+            var Diod_metalness = document.getElementById('metalness');
+                Diod_metalness.innerHTML += ' ' + mesh.material.metalness;
+            var Diod_option_metalness = document.getElementById('rangeMetalness');
+                Diod_option_metalness.value = mesh.material.metalness;
+
+            var Diod_emissive = document.getElementById('emissive');
+                Diod_emissive.innerHTML += ' ' + mesh.material.emissiveIntensity;
+            var Diod_option_emissive = document.getElementById('rangeEmissive');
+                Diod_option_emissive.value = mesh.material.emissiveIntensity;    
+            
+            // текстура для материала Diod    
+            var Diod_BaseColorMap = document.querySelector('.textures-available');
+                Diod_BaseColorMap.innerHTML +=  '<a href="#" class="active">' + mesh.material.map.image.src + '</a> <br>';
+                
+                // и т.д.
+        }
+    }
+
+    function setParamMaterial(mesh){
+        
+        var settingsSaveBtn = document.getElementById('settings-save-btn');
+        settingsSaveBtn.addEventListener('click', function(){
+            
+            switch (mesh.material.name) {
+                case 'Diod':
+                var Diod_option_roughness = document.getElementById('rangeRoughness');
+                    mesh.material.roughness = Diod_option_roughness.value;
+
+                var Diod_option_metalness = document.getElementById('rangeMetalness');
+                    mesh.material.metalness = Diod_option_metalness.value;
+
+                var Diod_option_emissive = document.getElementById('rangeEmissive');
+                    mesh.material.emissiveIntensity = Diod_option_emissive.value;
+                
+
+                //текущая текстура
+                console.log(mesh.material.map.image.src);
+
+                //устанавливаем новую текстуру  
+                var Diod_BaseColorMap = document.querySelector('.textures-available');
+                    mesh.material.map.image.src = 'models/RIG_lowpoly/Diod_baseColor.png';
+
+                console.log(mesh.material.map.image.src);
+
+               // и т.д.
+            }
+
+        });
     }
 
 
@@ -364,7 +456,7 @@
     }
 
     //временно отключаем блок GUI
-    //buildGui();
+    buildGui();
     window.addEventListener( 'resize', onWindowResize );
 
 })();

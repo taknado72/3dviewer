@@ -111,6 +111,15 @@ input.btn:hover{
     top: 20VH;
 }
 
+.textures-available {
+    padding: 5px;
+}
+
+a.active {
+    border: 1px solid white;
+}
+
+
 /* canvas render*/
 canvas {
     width: 100% !important;

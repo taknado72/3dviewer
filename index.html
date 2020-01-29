@@ -55,11 +55,7 @@
                 <div class="form-group">
                     <label for="selectMaterials">Укажите материал (Realistic PBR):</label>
                     <select multiple class="form-control" id="selectMaterials">
-                    <option>Material 1</option>
-                    <option>Material 2</option>
-                    <option>Material 3</option>
-                    <option>Material 4</option>
-                    <option>Material 5</option>
+                    <!-- option -> JS -->
                     </select>
                 </div>
 
@@ -69,13 +65,13 @@
                     <input type="button" value="T" class="btn settTx">
                 </div>
                 <div class="form-group">
-                    <label for="rangeMetalness">Metalness:</label><br>
-                    <input type="range" class="custom-range align-middle" min="0" max="5" step="0.5" id="rangeMetalness">
+                    <label for="rangeMetalness" id="metalness">Metalness:</label><br>
+                    <input type="range" class="custom-range align-middle" min="0" max="1" step="0.1" id="rangeMetalness">
                     <input type="button" value="T" class="btn settTx">
                 </div>
                 <div class="form-group">
-                    <label for="rangeRoughness">Roughness:</label><br>
-                    <input type="range" class="custom-range align-middle" min="0" max="5" step="0.5" id="rangeRoughness">
+                    <label for="rangeRoughness" id="roughness">Roughness:</label><br>
+                    <input type="range" class="custom-range align-middle" min="0" max="1" step="0.1" id="rangeRoughness">
                     <input type="button" value="T" class="btn settTx">
                 </div>
                 <div class="form-group">
@@ -84,8 +80,8 @@
                     <input type="button" value="T" class="btn settTx">
                 </div>
                 <div class="form-group">
-                    <label for="rangeEmissive">Emissive:</label><br>
-                    <input type="range" class="custom-range align-middle" min="0" max="5" step="0.5" id="rangeEmissive">
+                    <label for="rangeEmissive" id="emissive">Emissive:</label><br>
+                    <input type="range" class="custom-range align-middle" min="0" max="1" step="0.1" id="rangeEmissive">
                     <input type="button" value="T" class="btn settTx">
                 </div>
                 <div class="form-group">
