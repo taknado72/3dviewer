@@ -272,6 +272,20 @@
     }
 
 
+    //загрузка сцены из локального хранилища
+    function getFromJSON(){
+        var loadedSceneAsJson = JSON.parse(json);
+        var loader = new THREE.ObjectLoader();
+        var scene = loader.parse(loadedSceneAsJson);
+       
+    }
+
+    //сохранение сцены в локальное хранилище
+    function saveToJSON(){
+        localStorage.setItem('scene', JSON.stringify(scene.toJSON()));
+    }
+
+   
 
     //УСТАНОВКА ТЕКСТУР В ЗАВИСИМОСТИ ОТ МАТЕРИАЛОВ
     // function addTexture(n){
