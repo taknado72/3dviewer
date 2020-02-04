@@ -10,8 +10,6 @@
     	myCanvas = document.getElementById('myCanvas');
 
 
-    //RENDERER
-
     // RENDERER
 	if ( Detector.webgl )
 		renderer = new THREE.WebGLRenderer({
@@ -32,7 +30,7 @@
 
     //CAMERA
     camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 5000 );
-    camera.position.set( 0, 500, 1000 );
+    camera.position.set( 0, 200, 1000 );
     camera.lookAt( 0, 0, 0 );
     
 
@@ -43,69 +41,11 @@
 
     //AXES
     var axes = new THREE.AxesHelper(400);
-	scene.add(axes);
+	//scene.add(axes);
 
 
-
-    //SKYBOX
-    var imagePrefix = "img/dawnmountain-";
-	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
-	var imageSuffix = ".png";
-	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );	
-	
-	var materialArray = [];
-	for (var i = 0; i < 6; i++)
-		materialArray.push( new THREE.MeshBasicMaterial({
-			map: new THREE.TextureLoader().load( imagePrefix + directions[i] + imageSuffix ),
-			side: THREE.BackSide
-		}));
-	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-    //scene.add( skyBox );
-
-
-
-    //HDR
-    // var hdrUrls = [ 'px.hdr', 'nx.hdr', 'py.hdr', 'ny.hdr', 'pz.hdr', 'nz.hdr' ];
-	// hdrCubeMap = new HDRCubeTextureLoader()
-	// 				.setPath( 'img/pisaHDR/' )
-	// 				.setDataType( THREE.UnsignedByteType )
-	// 				.load( hdrUrls, function () {
-                    // 	hdrCubeRenderTarget = pmremGenerator.fromCubemap( hdrCubeMap );
-                    // 	hdrCubeMap.magFilter = THREE.LinearFilter;
-                    // 	hdrCubeMap.needsUpdate = true;
-                    // 	} );
-
-
-    //LIGHTS
-    // var width = 300;
-    // var height = 300;
-    // var intensity = 20;
-    // var rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
-    // rectLight.position.set( 5, 400, 0 );
-    // rectLight.lookAt( 0, 0, 0 );
-    // rectLight.visible = true;
-    // scene.add( rectLight )
-    
-    // rectLightHelper = new THREE.RectAreaLightHelper( rectLight );
-    // rectLight.add( rectLightHelper );
-
-
-    // var width1 = 300;
-    // var height1 = 300;
-    // var intensity1 = 10;
-    // var rectLight1 = new THREE.RectAreaLight( 0xffffff, intensity1,  width1, height1 );
-    // rectLight1.position.set( 5, 0, 600 );
-    // rectLight1.lookAt( 0, 0, 0 );
-    // rectLight1.visible = true;
-    // scene.add( rectLight1 )
-    
-    // rectLightHelper1 = new THREE.RectAreaLightHelper( rectLight1 );
-    // rectLight1.add( rectLightHelper1 );
-
-
-
-    var dirLight = new THREE.DirectionalLight( 0xffffff, 2 );
+    //LIGTH
+    var dirLight = new THREE.DirectionalLight( 0xffffff, 3);
     dirLight.color.setHSL( 0.1, 1, 0.95 );
     dirLight.position.set( -1, 1.75, 1 );
     dirLight.position.multiplyScalar( 50 );
@@ -123,12 +63,9 @@
     spotLight.shadow.mapSize.height = 1024;
     spotLight.shadow.camera.near = 10;
     spotLight.shadow.camera.far = 200;
-    scene.add( spotLight );
+    //scene.add( spotLight );
                     
-    lightHelper = new THREE.SpotLightHelper( spotLight );
-    scene.add( lightHelper );
-                    
-    
+        
     // FLOOR (пока не импользуем)
     var floorTexture = new THREE.TextureLoader().load( '../img/wood.jpg' );
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
@@ -148,8 +85,7 @@
     //CONTROL    
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
     
-
-
+    
     //LOADING MANAGER
     var manager = new THREE.LoadingManager();
 
@@ -173,16 +109,19 @@
     };
 
 
+    //ENVIRONMENT (Окружение с бэкграундом кубом, а также для material.envMap)
+    var urls = [
+        'img/smallHangar/px.jpg',
+        'img/smallHangar/nx.jpg',
+        'img/smallHangar/py.jpg',
+        'img/smallHangar/ny.jpg',
+        'img/smallHangar/pz.jpg',
+        'img/smallHangar/nz.jpg',
+    ];
 
-    //TEXTURE
-    // var textureloader  = new THREE.ImageLoader( manager );
-
-    // var textureCoolerChasis = new THREE.Texture();
-
-    // textureloader.load( 'models/RIG_lowpoly/Cooler_chasis_baseColor.png', function ( image ) {
-    //     textureCoolerChasis.image = image;
-    //     textureCoolerChasis.needsUpdate = true;
-    // });
+    var cubeLoader = new THREE.CubeTextureLoader();
+    var cubeMap = cubeLoader.load(urls);
+    //scene.background = cubeMap;
 
 
     //MODEL (загрузка модели в формате gltf)
@@ -198,12 +137,17 @@
         mesh.position.y = 35;
         mesh.scale.set(0.5, 0.5, 0.5);
         mesh.castShadow = true;
-    
+
+            
         const materialsName = new Set();
         mesh.traverse(function(child) {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
+
+            child.material.envMap = cubeMap;
+            child.material.aoMapIntensity = 0.6;
+			child.material.needsUpdate = true;
     
             materialsName.add(child.material.name);
             getParamMaterial(child);
@@ -225,8 +169,7 @@
 
     //RENDER LOOP
     render();
-    
-    
+      
     
     var delta = 0;
     var prevTime = Date.now();
@@ -251,8 +194,6 @@
             }
         }
             
-            lightHelper.update();
-                        
             renderer.render(scene, camera);
             requestAnimationFrame(render);
     }
@@ -296,6 +237,7 @@
                 // и т.д.
         }
     }
+
 
     function setParamMaterial(mesh){
         
@@ -486,7 +428,7 @@
     }
 
     //временно отключаем блок GUI
-    buildGui();
+    //buildGui();
     window.addEventListener( 'resize', onWindowResize );
 
 })();
