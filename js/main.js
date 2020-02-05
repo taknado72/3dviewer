@@ -30,7 +30,7 @@
 
     //CAMERA
     camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 5000 );
-    camera.position.set( 0, 200, 1000 );
+    camera.position.set( 0, 200, 900 );
     camera.lookAt( 0, 0, 0 );
     
 
@@ -169,7 +169,6 @@
 
     //RENDER LOOP
     render();
-      
     
     var delta = 0;
     var prevTime = Date.now();
@@ -182,14 +181,14 @@
                 //animation mesh (пока не используем)
                 //mesh.morphTargetInfluences[ 0 ] = Math.sin(delta) * 20.0;
                 
-                //mesh.rotation.y += 0.005;
+                mesh.rotation.y += 0.005;
             } 
         } else {
             if (infoModule) {
                 if(camera.position.z > 900){
                     camera.position.z -= 5;
                 } else {
-                    document.getElementById("1").style.display = "block";
+                    document.getElementById("specification").style.display = "block";
                 }
             }
         }
@@ -207,106 +206,6 @@
 
         renderer.setSize( myCanvas.clientWidth, myCanvas.clientHeight );
     }
-
-
-
-
-    function getParamMaterial(mesh){
-        
-        switch (mesh.material.name) {
-            case 'Diod':
-            var Diod_roughness = document.getElementById('roughness');
-                Diod_roughness.innerHTML += ' ' + mesh.material.roughness;
-            var Diod_option_roughness = document.getElementById('rangeRoughness');
-                Diod_option_roughness.value = mesh.material.roughness;
-
-            var Diod_metalness = document.getElementById('metalness');
-                Diod_metalness.innerHTML += ' ' + mesh.material.metalness;
-            var Diod_option_metalness = document.getElementById('rangeMetalness');
-                Diod_option_metalness.value = mesh.material.metalness;
-
-            var Diod_emissive = document.getElementById('emissive');
-                Diod_emissive.innerHTML += ' ' + mesh.material.emissiveIntensity;
-            var Diod_option_emissive = document.getElementById('rangeEmissive');
-                Diod_option_emissive.value = mesh.material.emissiveIntensity;    
-            
-            // текстура для материала Diod    
-            var Diod_BaseColorMap = document.querySelector('.textures-available');
-                Diod_BaseColorMap.innerHTML +=  '<a href="#" class="active">' + mesh.material.map.image.src + '</a> <br>';
-                
-                // и т.д.
-        }
-    }
-
-
-    function setParamMaterial(mesh){
-        
-        var settingsSaveBtn = document.getElementById('settings-save-btn');
-        settingsSaveBtn.addEventListener('click', function(){
-            
-            switch (mesh.material.name) {
-                case 'Diod':
-                var Diod_option_roughness = document.getElementById('rangeRoughness');
-                    mesh.material.roughness = Diod_option_roughness.value;
-
-                var Diod_option_metalness = document.getElementById('rangeMetalness');
-                    mesh.material.metalness = Diod_option_metalness.value;
-
-                var Diod_option_emissive = document.getElementById('rangeEmissive');
-                    mesh.material.emissiveIntensity = Diod_option_emissive.value;
-                
-
-                //текущая текстура
-                console.log(mesh.material.map.image.src);
-
-                //устанавливаем новую текстуру  
-                var Diod_BaseColorMap = document.querySelector('.textures-available');
-                    mesh.material.map.image.src = 'models/RIG_lowpoly/Diod_baseColor.png';
-
-                console.log(mesh.material.map.image.src);
-
-               // и т.д.
-            }
-
-        });
-    }
-
-
-    //загрузка сцены из локального хранилища
-    function getFromJSON(){
-        var loadedSceneAsJson = JSON.parse(json);
-        var loader = new THREE.ObjectLoader();
-        var scene = loader.parse(loadedSceneAsJson);
-       
-    }
-
-    //сохранение сцены в локальное хранилище
-    function saveToJSON(){
-        localStorage.setItem('scene', JSON.stringify(scene.toJSON()));
-    }
-
-   
-
-    //УСТАНОВКА ТЕКСТУР В ЗАВИСИМОСТИ ОТ МАТЕРИАЛОВ
-    // function addTexture(n){
-    //   switch (n) {
-    //   case 'Diod':
-    //     var textureDiod = new THREE.MeshStandardMaterial({
-    //         color: 0x2194ce,
-    //         map: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture1.png' );
-    //         emissive: 1,
-    //         emissiveMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture2.png' );
-    //         metalness: 1,
-    //         metalnessMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture3.png' );
-    //         roughness: 1,
-    //         roughnessMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture4.png' );
-    //         normalMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture5.png' );
-    //         bumpMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture6.png' );
-    //     });
-    //     break;
-    //   }
-    // }
-
 
 
     //GUI (блок для изменения заданных параметров с сайта)
@@ -366,8 +265,115 @@
         lightFolder.close();   
     }
 
+    
+    //временно отключаем блок GUI
+    //buildGui();
+    window.addEventListener( 'resize', onWindowResize );
 
-    //MAIN FUNCTION
+
+
+    // ====================================MAIN FUNCTION=================================
+
+    //получаем параметры материалов
+    function getParamMaterial(mesh){
+        
+        switch (mesh.material.name) {
+            case 'Diod':
+            var Diod_roughness = document.getElementById('roughness');
+                Diod_roughness.innerHTML += ' ' + mesh.material.roughness;
+            var Diod_option_roughness = document.getElementById('rangeRoughness');
+                Diod_option_roughness.value = mesh.material.roughness;
+
+            var Diod_metalness = document.getElementById('metalness');
+                Diod_metalness.innerHTML += ' ' + mesh.material.metalness;
+            var Diod_option_metalness = document.getElementById('rangeMetalness');
+                Diod_option_metalness.value = mesh.material.metalness;
+
+            var Diod_emissive = document.getElementById('emissive');
+                Diod_emissive.innerHTML += ' ' + mesh.material.emissiveIntensity;
+            var Diod_option_emissive = document.getElementById('rangeEmissive');
+                Diod_option_emissive.value = mesh.material.emissiveIntensity;    
+            
+            // текстура для материала Diod    
+            var Diod_BaseColorMap = document.querySelector('.textures-available');
+                Diod_BaseColorMap.innerHTML +=  '<a href="#" class="active">' + mesh.material.map.image.src + '</a> <br>';
+                
+                // и т.д.
+        }
+    }
+
+
+    //устанавливаем параметры материалов
+    function setParamMaterial(mesh){
+        
+        var settingsSaveBtn = document.getElementById('settings-save-btn');
+        settingsSaveBtn.addEventListener('click', function(){
+            
+            switch (mesh.material.name) {
+                case 'Diod':
+                var Diod_option_roughness = document.getElementById('rangeRoughness');
+                    mesh.material.roughness = Diod_option_roughness.value;
+
+                var Diod_option_metalness = document.getElementById('rangeMetalness');
+                    mesh.material.metalness = Diod_option_metalness.value;
+
+                var Diod_option_emissive = document.getElementById('rangeEmissive');
+                    mesh.material.emissiveIntensity = Diod_option_emissive.value;
+                
+
+                //текущая текстура
+                console.log(mesh.material.map.image.src);
+
+                //устанавливаем новую текстуру  
+                var Diod_BaseColorMap = document.querySelector('.textures-available');
+                    mesh.material.map.image.src = 'models/RIG_lowpoly/Diod_baseColor.png';
+
+                console.log(mesh.material.map.image.src);
+
+               // и т.д.
+            }
+
+        });
+    }
+
+
+    // //загрузка сцены из локального хранилища
+    // function getFromJSON(){
+    //     var loadedSceneAsJson = JSON.parse(json);
+    //     var loader = new THREE.ObjectLoader();
+    //     var scene = loader.parse(loadedSceneAsJson);
+    // }
+
+    // //сохранение сцены в локальное хранилище
+    // function saveToJSON(){
+    //     localStorage.setItem('scene', JSON.stringify(scene.toJSON()));
+    // }
+
+   
+
+    //УСТАНОВКА ТЕКСТУР В ЗАВИСИМОСТИ ОТ МАТЕРИАЛОВ
+    // function addTexture(n){
+    //   switch (n) {
+    //   case 'Diod':
+    //     var textureDiod = new THREE.MeshStandardMaterial({
+    //         color: 0x2194ce,
+    //         map: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture1.png' );
+    //         emissive: 1,
+    //         emissiveMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture2.png' );
+    //         metalness: 1,
+    //         metalnessMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture3.png' );
+    //         roughness: 1,
+    //         roughnessMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture4.png' );
+    //         normalMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture5.png' );
+    //         bumpMap: new THREE.TextureLoader().load( 'models/RIG_lowpoly/texture6.png' );
+    //     });
+    //     break;
+    //   }
+    // }
+
+
+    
+    //панель настроек материала
     const settingsEl = document.getElementById('settings');
     const settingsToggler = document.getElementById('settings-toggler');
         
@@ -376,7 +382,7 @@
     });
 
 
-    //block settings Texture
+    //панель загрузок текстур
     var x = document.getElementById('texture-browser-panel');
     var el = document.querySelectorAll('.settTx');
     for(var i = 0; i< el.length; i++){
@@ -386,63 +392,93 @@
     }
 
 
-      
-    function showInfo (num) {
-        switch(num) {
-            case 0:
-                info = true;
-                infoModule = false;
-                break;
-            case 1:
-                info = true;
-                infoModule = true;
-                break;
-            case 2:
-                info = false;
-                document.getElementById("1").style.display = "none";
-                break;
-            case 3:
-                mesh.children[0].children[0].position.y = 0.5; //карта
-                mesh.children[0].children[1].position.y = 0.5;
-                mesh.children[0].children[2].position.y = 0.5;
-                mesh.children[0].children[28].position.y = 0.5; // вентилятор
-                mesh.children[0].children[29].position.y = 0.5;
-                mesh.children[0].children[66].position.y = -0.5; //корпус
-                mesh.children[0].children[69].position.x = -0.5; //блок питания
-                mesh.children[0].children[70].position.x = -0.5;
-                mesh.children[0].children[71].position.x = -0.5;
-                break;
-            case 4:
-                mesh.children[0].children[0].position.y = 0;
-                mesh.children[0].children[1].position.y = 0;
-                mesh.children[0].children[2].position.y = 0;
-                mesh.children[0].children[28].position.y = 0;
-                mesh.children[0].children[29].position.y = 0;
-                mesh.children[0].children[66].position.y = 0;
-                mesh.children[0].children[69].position.x = 0;
-                mesh.children[0].children[70].position.x = 0;
-                mesh.children[0].children[71].position.x = 0;
-                break;
-            case 5:
-                for (var i = 0; i <= mesh.children[0].children.length; i++) {
-                    mesh.children[0].children[i].visible = false;
-                    mesh.children[0].children[66].visible = true; //корпус
-                }
-                break;
-            case 6:
-                for (var i = 0; i <= mesh.children[0].children.length; i++) {
-                    mesh.children[0].children[i].visible = true;
-                    mesh.children[0].children[66].visible = true; //корпус
-                }
-                break;
-                
-            default: 
-                break;
-        }   
-    }
+    //ФУНКЦИОНАЛЬНЫЕ КНОПКИ СЦЕНЫ
 
-    //временно отключаем блок GUI
-    //buildGui();
-    window.addEventListener( 'resize', onWindowResize );
+    //остановка вращения модели
+    const btnStop = document.getElementById('btn-stop');
+
+    btnStop.addEventListener('click', function () {
+        info = true;
+        infoModule = false;
+    });
+
+    //показать характеристики модели
+    const btnSpecification = document.getElementById('btn-specification');
+
+    btnSpecification.addEventListener('click', function () {
+        info = true;
+        infoModule = true;
+    });
+
+    //продолжить вращение модели
+    const btnStart = document.getElementById('btn-start');
+
+    btnStart.addEventListener('click', function () {
+        info = false;
+        document.getElementById("specification").style.display = "none";
+    });
+
+    //разобрать модель
+    const btnMakeOut = document.getElementById('btn-make-out');
+
+    btnMakeOut.addEventListener('click', function () {
+        mesh.children[0].children[0].position.y = 0.5; //карта
+        mesh.children[0].children[1].position.y = 0.5;
+        mesh.children[0].children[2].position.y = 0.5;
+        mesh.children[0].children[28].position.y = 0.5; // вентилятор
+        mesh.children[0].children[29].position.y = 0.5;
+        mesh.children[0].children[66].position.y = -0.5; //корпус
+        mesh.children[0].children[69].position.x = -0.5; //блок питания
+        mesh.children[0].children[70].position.x = -0.5;
+        mesh.children[0].children[71].position.x = -0.5;
+    });
+
+    //собрать модель
+    const btnMakeIn = document.getElementById('btn-make-in');
+
+    btnMakeIn.addEventListener('click', function () {
+        mesh.children[0].children[0].position.y = 0;
+        mesh.children[0].children[1].position.y = 0;
+        mesh.children[0].children[2].position.y = 0;
+        mesh.children[0].children[28].position.y = 0;
+        mesh.children[0].children[29].position.y = 0;
+        mesh.children[0].children[66].position.y = 0;
+        mesh.children[0].children[69].position.x = 0;
+        mesh.children[0].children[70].position.x = 0;
+        mesh.children[0].children[71].position.x = 0;
+    });
+
+    //показать деталь корпуса модели
+    const btnDetail = document.getElementById('btn-detail');
+
+    btnDetail.addEventListener('click', function () {
+        for (var i = 0; i <= mesh.children[0].children.length; i++) {
+            mesh.children[0].children[i].visible = false;
+            mesh.children[0].children[66].visible = true; //корпус
+        }
+
+    });
+
+    //показать корпус модели
+    const showDetail = document.getElementById('showDetail');
+
+    showDetail.addEventListener('click', function () {
+        for (var i = 0; i <= mesh.children[0].children.length; i++) {
+            mesh.children[0].children[i].visible = false;
+            mesh.children[0].children[66].visible = true; //корпус
+        }
+
+    });
+
+    //показываем все детали модели
+    const btnBack = document.getElementById('btn-back');
+
+    btnBack.addEventListener('click', function () {
+        for (var i = 0; i <= mesh.children[0].children.length; i++) {
+            mesh.children[0].children[i].visible = true;
+        }
+    });
+
+    
 
 })();

@@ -21,21 +21,21 @@
         <div class="row justify-content-md-center">
                 <div class="bottom_bar mx-auto">
                     <input type="button" value="Настройки" class="btn" id="settings-toggler"/>
-                    <input type="button" value="Не вращать" class="btn" onclick="showInfo(0);"/>
-                    <input type="button" value="Характеристики" class="btn" onclick="showInfo(1);"/>
-                    <input type="button" value="Продолжить" class="btn" onclick="showInfo(2);"/>
-                    <input type="button" value="Разобрать" class="btn" onclick="showInfo(3);"/>
-                    <input type="button" value="Собрать" class="btn" onclick="showInfo(4);"/>
-                    <input type="button" value="Детально" class="btn" onclick="showInfo(5);"/>
-                    <input type="button" value="Назад" class="btn" onclick="showInfo(6);"/>
+                    <input type="button" value="Не вращать" class="btn" id="btn-stop"/>
+                    <input type="button" value="Характеристики" class="btn" id="btn-specification"/>
+                    <input type="button" value="Продолжить" class="btn" id="btn-start"/>
+                    <input type="button" value="Разобрать" class="btn" id="btn-make-out"/>
+                    <input type="button" value="Собрать" class="btn" id="btn-make-in"/>
+                    <input type="button" value="Детально" class="btn" id="btn-detail"/>
+                    <input type="button" value="Назад" class="btn" id="btn-back"/>
                 </div>
         </div>
                
-        <div id="1" style="left:80%; top:10%; width:300px; position:absolute; z-index:100; display:none;">
+        <div id="specification" style="display:none;">
             <h2>Модуль для майнинга</h2> <br>
             <h4>Технические характеристики:</h4>
             <ul>
-                <li><span onclick="showInfo(5);">корпус - 1 шт.</span></li>
+                <li><span id="showDetail">корпус - 1 шт.</span></li>
                 <li>количество видеокарт - 8 шт.</li>
                 <li>блок питания - 1 шт.</li>
                 <li>вентиляторы - 4 шт.</li>

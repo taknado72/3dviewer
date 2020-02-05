@@ -3,6 +3,7 @@ body{
     overflow: hidden;
     background-color: #262626;
     min-height: 100vh;
+    color: white;
 }
 
 .bg{
@@ -119,6 +120,14 @@ a.active {
     border: 1px solid white;
 }
 
+
+#specification {
+    left:75%; 
+    top:10%; 
+    width:300px; 
+    position:absolute; 
+    z-index:100; 
+}
 
 /* canvas render*/
 canvas {
